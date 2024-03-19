@@ -72,7 +72,7 @@ async function connectToWhatsApp() {
         console.log("conexión abierta");
         updateQR("connected");
         return;
-      }      
+      }
     } catch (error) {
       console.log("salio mal");
     }
@@ -123,24 +123,24 @@ const isConnected = () => {
 };
 
 app.post("/send-comprobantes", async (req, res) => {
-  const { 
-    urlPDF, 
-    urlXML, 
-    number, 
-    cliente, 
-    num_comprobante, 
-    clave_acceso 
+  const {
+    urlPDF,
+    urlXML,
+    number,
+    cliente,
+    num_comprobante,
+    clave_acceso
   } = req.body;
 
   try {
       let numberWA = "593" + number + "@s.whatsapp.net";
-   
+
       if (isConnected()) {
-       
+
         const exist = await sock.onWhatsApp(numberWA);
 
         if (exist?.jid || (exist && exist[0]?.jid)) {
-          
+
           try {
             await sock.sendMessage(exist.jid || exist[0].jid, {
               text: `Estimado(a): ${ cliente } se ha emitido la siguiente factura a su nombre: \nFactura: ${ num_comprobante }`
@@ -179,10 +179,13 @@ app.post("/send-comprobantes", async (req, res) => {
           response: "Aun no estas conectado",
         });
       }
-    
+
   } catch (err) {
     res.status(500).send(err);
   }
+});
+app.get("/", async (req, res) => {
+  res.send('ok')
 });
 
 io.on("connection", async (socket) => {
