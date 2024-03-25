@@ -129,7 +129,8 @@ app.post("/send-comprobantes", async (req, res) => {
     number,
     cliente,
     num_comprobante,
-    clave_acceso
+    clave_acceso,
+    empresa
   } = req.body;
 
   try {
@@ -143,7 +144,7 @@ app.post("/send-comprobantes", async (req, res) => {
 
           try {
             await sock.sendMessage(exist.jid || exist[0].jid, {
-              text: `Estimado(a): ${ cliente } se ha emitido la siguiente factura a su nombre: \nFactura: ${ num_comprobante }`
+              text: `Estimado(a): ${ cliente } la empresa ${ empresa } le ha emitido la siguiente factura a su nombre: \nFactura: ${ num_comprobante }`
             });
 
             await sock.sendMessage(exist.jid || exist[0].jid, {
@@ -162,28 +163,57 @@ app.post("/send-comprobantes", async (req, res) => {
               Mimetype: "application/pdf"
             });
 
-            res.status(200).json({
-              status: true,
-              response: response,
-            });
+            res.status(200).json({ status: true });
           } catch (error) {
-            res.status(500).json({
-              status: false,
-              response: error,
-            });
+            res.status(500).send("error ws");
           }
         }
       } else {
-        res.status(500).json({
-          status: false,
-          response: "Aun no estas conectado",
-        });
+        res.status(500).send("error ws");
       }
 
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send("error ws");
   }
 });
+
+app.post("/send-comprobantes-proforma", async (req, res) => {
+  const { urlPDF, number, cliente, empresa, name_proforma } = req.body;
+
+  try {
+      let numberWA = "593" + number + "@s.whatsapp.net";
+
+      if (isConnected()) {
+
+        const exist = await sock.onWhatsApp(numberWA);
+
+        if (exist?.jid || (exist && exist[0]?.jid)) {
+
+          try {
+            await sock.sendMessage(exist.jid || exist[0].jid, {
+              text: `Estimado(a): ${ cliente } la empresa ${ empresa } le ha emitido la siguiente proforma a su nombre: `
+            });
+
+            await sock.sendMessage(exist.jid || exist[0].jid, {
+              document: { url: urlPDF },
+              fileName: name_proforma,
+              Mimetype: "application/pdf"
+            });
+
+            res.status(200).json({ status: true });
+          } catch (error) {
+            res.status(500).send("error ws");
+          }
+        }
+      } else {
+        res.status(500).send("error ws");
+      }
+
+  } catch (err) {
+    res.status(500).send("error ws");
+  }
+});
+
 app.get("/", async (req, res) => {
   res.send('ok')
 });
