@@ -144,11 +144,7 @@ app.post("/send-comprobantes", async (req, res) => {
 
           try {
             await sock.sendMessage(exist.jid || exist[0].jid, {
-              text: `Estimado(a): ${ cliente } la empresa ${ empresa } le ha emitido la siguiente factura a su nombre: \nFactura: ${ num_comprobante }`
-            });
-
-            await sock.sendMessage(exist.jid || exist[0].jid, {
-              text: `A continuacion enviamos adjunto el comprobante electronico en formato XML y su interpretacion en formato PDF ELECTRONICO(A)`
+              text: `*Estimado(a):* ${ cliente } la empresa *${ empresa }* le ha emitido la siguiente factura a su nombre: \n\nFactura: ${ num_comprobante }\n\nA continuacion adjuntamos el comprobante electrónico en formato XML y PDF.`
             });
 
             await sock.sendMessage(exist.jid || exist[0].jid, {
