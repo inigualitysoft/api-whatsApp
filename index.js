@@ -134,7 +134,7 @@ app.post("/send-comprobantes", async (req, res) => {
   } = req.body;
 
   try {
-      let numberWA = "593" + number + "@s.whatsapp.net";
+      let numberWA = number + "@s.whatsapp.net";
 
       if (isConnected()) {
 
@@ -177,7 +177,7 @@ app.post("/send-comprobantes-proforma", async (req, res) => {
   const { urlPDF, number, cliente, empresa, name_proforma } = req.body;
 
   try {
-      let numberWA = "593" + number + "@s.whatsapp.net";
+      let numberWA = number + "@s.whatsapp.net";
 
       if (isConnected()) {
 
@@ -187,7 +187,7 @@ app.post("/send-comprobantes-proforma", async (req, res) => {
 
           try {
             await sock.sendMessage(exist.jid || exist[0].jid, {
-              text: `Estimado(a): ${ cliente } la empresa ${ empresa } le ha emitido la siguiente proforma a su nombre: `
+              text: `*Estimado(a):* ${ cliente } la empresa *${ empresa }* le ha emitido la siguiente proforma a su nombre`
             });
 
             await sock.sendMessage(exist.jid || exist[0].jid, {
@@ -233,7 +233,7 @@ const updateQR = (data) => {
       break;
     case "connected":
       soket?.emit("qrstatus", "/imgs/check.svg");
-      soket?.emit("log", " usaario conectado");
+      soket?.emit("log", " usuario conectado");
       const { id, name } = sock?.user;
       var userinfo = id + " " + name;
       soket?.emit("user", userinfo);
