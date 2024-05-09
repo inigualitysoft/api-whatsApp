@@ -1,5 +1,6 @@
 # Logs
 /session_auth_info
+/sessiones/*
 logs
 *.log
 npm-debug.log*

@@ -308,13 +308,13 @@ app.post("/send-comprobantes", async (req, res) => {
 
           await sessiones[telefono].socket.sendMessage(exist.jid || exist[0].jid, {
             document: { url: urlXML },
-            fileName: `${ clave_acceso }.xml`,
+            fileName: `${ num_comprobante }.xml`,
             Mimetype: "application/xml"
           })
 
           await sessiones[telefono].socket.sendMessage(exist.jid || exist[0].jid, {
             document: { url: urlPDF },
-            fileName: `${ clave_acceso }.pdf`,
+            fileName: `${ num_comprobante }.pdf`,
             Mimetype: "application/pdf"
           });
 
@@ -341,8 +341,6 @@ app.post("/send-comprobantes-proforma", async (req, res) => {
     empresa,
     name_proforma
   } = req.body;
-
-  console.log( req.body );
 
   try {
       const carpetaExiste = existeCarpeta(`./sessiones/${ telefono }`);
