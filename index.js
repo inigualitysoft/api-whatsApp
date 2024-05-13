@@ -291,6 +291,8 @@ app.post("/send-comprobantes", async (req, res) => {
 
   try {
 
+    console.log( req.body );
+
     const carpetaExiste = existeCarpeta(`./sessiones/${ telefono }`);
 
     let numberWA = number + "@s.whatsapp.net";
